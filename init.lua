@@ -6,12 +6,33 @@ local vis = vis
 -- default maxsize
 M.maxsize = 1000
 
+local exists = function(filepath)
+    local ok, err = os.rename(filepath, filepath)
+    return ok and filepath or false
+end
+
 -- get the default system cache directory
 local get_default_cache_path = function()
-	local HOME = os.getenv('HOME')
-	local XDG_CACHE_HOME = os.getenv('XDG_CACHE_HOME')
-	local BASE = XDG_CACHE_HOME or HOME
-	return BASE .. '/.vis-cursors'
+    local filename = ".vis-cursors"
+    local HOME = os.getenv("HOME")
+    local home_path = HOME .. "/" .. filename
+
+    -- check if $XDG_CACHE_HOME or $HOME/.cache exists
+    local cache_dir = exists(os.getenv("XDG_CACHE_HOME") or (HOME .. "/.cache"))
+
+    if cache_dir then
+        local cache_path = cache_dir .. "/" .. filename
+
+        -- move the file if it doesn't already exist at cache_path
+        if not exists(cache_path) then
+            os.rename(home_path, cache_path)
+        end
+
+        return cache_path
+    end
+
+    -- fallback to $HOME/.[filename]
+    return home_path
 end
 
 -- default save path
