@@ -7,39 +7,38 @@ local vis = vis
 M.maxsize = 1000
 
 local exists = function(filepath)
-    local ok, err = os.rename(filepath, filepath)
-    return ok and filepath or false
+	local ok, err = os.rename(filepath, filepath)
+	return ok and filepath or false
 end
 
 -- get the default system cache directory
 local get_default_cache_path = function()
-    local filename = ".vis-cursors"
-    local HOME = os.getenv("HOME")
-    local home_path = HOME .. "/" .. filename
+	local filename = ".vis-cursors"
+	local HOME = os.getenv("HOME")
+	local home_path = HOME .. "/" .. filename
 
-    -- check if $XDG_CACHE_HOME or $HOME/.cache exists
-    local cache_dir = exists(os.getenv("XDG_CACHE_HOME") or (HOME .. "/.cache"))
+	-- check if $XDG_CACHE_HOME or $HOME/.cache exists
+	local cache_dir = exists(os.getenv("XDG_CACHE_HOME") or (HOME .. "/.cache"))
 
-    if cache_dir then
-        local cache_path = cache_dir .. "/" .. filename
+	if cache_dir then
+		local cache_path = cache_dir .. "/" .. filename
 
-        -- move the file if it doesn't already exist at cache_path
-        if not exists(cache_path) then
-            os.rename(home_path, cache_path)
-        end
+		-- move the file if it doesn't already exist at cache_path
+		if not exists(cache_path) then
+			os.rename(home_path, cache_path)
+		end
 
-        return cache_path
-    end
+		return cache_path
+	end
 
-    -- fallback to $HOME/.[filename]
-    return home_path
+	-- fallback to $HOME/.[filename]
+	return home_path
 end
 
 -- default save path
 M.path = get_default_cache_path()
 
 local function read_files()
-
 	-- read file
 	local file = io.open(M.path)
 	if file == nil then
@@ -66,7 +65,6 @@ end
 
 -- apply cursor pos on win open
 local on_win_open = function(win)
-
 	if win.file == nil or win.file.path == nil then
 		return
 	end
@@ -87,7 +85,6 @@ end
 
 -- set cursor pos on close
 local on_win_close = function(win)
-
 	if win.file == nil or win.file.path == nil then
 		return
 	end
@@ -117,7 +114,6 @@ end
 
 -- write cursors to file on quit
 local on_quit = function()
-
 	local file = io.open(M.path, 'w+')
 	if file == nil then
 		return
