@@ -1,6 +1,7 @@
 local M = {}
 local cursors = {}
 local files = {}
+local vis = vis
 
 -- default maxsize
 M.maxsize = 1000
@@ -16,7 +17,7 @@ end
 -- default save path
 M.path = get_default_cache_path()
 
-function read_files()
+local function read_files()
 
 	-- read file
 	local file = io.open(M.path)
