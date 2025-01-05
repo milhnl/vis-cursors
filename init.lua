@@ -1,7 +1,6 @@
 local M = {}
 local cursors = {}
 local files = {}
-local vis = vis
 
 -- default maxsize
 M.maxsize = 1000
