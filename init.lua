@@ -10,7 +10,7 @@ local get_default_cache_path = function()
 	local HOME = os.getenv("HOME")
 	local XDG_CACHE_HOME = os.getenv("XDG_CACHE_HOME")
 	local cache_dir = XDG_CACHE_HOME or (HOME .. "/.cache")
-	local cache_path = cache_dir .. "/" .. "vis-cursors"
+	local cache_path = cache_dir .. "/" .. "vis-cursors.csv"
 	return cache_path
 end
 
