@@ -28,10 +28,9 @@ local function read_files()
 
 	-- read positions per file path
 	for line in file:lines() do
-		for path, pos in string.gmatch(line, '(.+)[,%s](%d+)') do
-			cursors[path] = pos
-			table.insert(files, path)
-		end
+		local path, pos = string.match(line, '^(.+)[,%s](%d+)$')
+		cursors[path] = pos
+		table.insert(files, path)
 	end
 
 	file:close()
