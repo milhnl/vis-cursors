@@ -14,6 +14,12 @@ local get_default_cache_path = function()
 	return cache_path
 end
 
+-- default ignore patterns
+M.ignore = {
+	"COMMIT_EDITMSG$",
+	"git%-rebase%-todo$",
+}
+
 -- default save path
 M.path = get_default_cache_path()
 
@@ -82,6 +88,12 @@ local on_win_close = function(win)
 		return
 	end
 
+	-- ignore files specified in the ignore field
+	for _, pattern in pairs(M.ignore) do
+		if win.file.path:match(pattern) then
+			return
+		end
+	end
 
 	-- insert current path to top of files
 	table.insert(files, 1, win.file.path)
