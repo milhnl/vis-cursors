@@ -42,6 +42,16 @@ local function read_files()
 	file:close()
 end
 
+-- ignore files specified in the ignore field
+local is_file_ignored = function(path)
+	for _, pattern in pairs(M.ignore) do
+		if path:match(pattern) then
+			return true
+		end
+	end
+	return false
+end
+
 -- read cursors from file on init
 local on_init = function()
 	read_files()
@@ -50,6 +60,10 @@ end
 -- apply cursor pos on win open
 local on_win_open = function(win)
 	if win.file == nil or win.file.path == nil then
+		return
+	end
+
+	if is_file_ignored(win.file.path) then
 		return
 	end
 
@@ -88,11 +102,8 @@ local on_win_close = function(win)
 		return
 	end
 
-	-- ignore files specified in the ignore field
-	for _, pattern in pairs(M.ignore) do
-		if win.file.path:match(pattern) then
-			return
-		end
+	if is_file_ignored(win.file.path) then
+		return
 	end
 
 	-- insert current path to top of files
